@@ -1,6 +1,6 @@
 import express from 'express'; // Import express 
 import cors from 'cors'; // Import cors
-import generate from './controllers/generate.js'; // Import the generate function
+import generate from './src/controllers/gen.js'; // Import the generate function
 
 const app = express(); // Create an express app
 app.use(express.json()); // Use the json middleware
@@ -20,7 +20,8 @@ app.post('/generate', async (req, res) => { // Create a route
     const { queryDescription } = req.body; // Get the question from the request body
     try {
         const roadQuery = await generate(queryDescription);
-        res.json({respose: roadQuery})
+        res.json({response: roadQuery}); // Send the response
+        console.log('Roadmap generated:', roadQuery); // Log the generated roadmap
     } catch (error) {
         console.error(error); // Log an error
         res.status(500).send('An error occurred'); // Send an error response

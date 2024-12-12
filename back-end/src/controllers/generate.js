@@ -14,17 +14,22 @@ const generate = async (queryDescription) => { // Define a função de geração
     const chatGPT = async (queryDescription) => {
         const message = [  // Treinamento de diálogo para o assistente virtual saber como responder
             // Exemplo de diálogo
-            {role: 'system', content: 'Voce está um desenvolvedor e deseja aprender mais sobre linguagens de programação e desenvolvimento de habilidades na área de front-end.'},
-            {role: 'user', content: 'Gere um roadmap para aprender linguagens e desenvolver habilidades na área de front-end.'},
-            {role: 'assistant', content: 'Claro, vou te ajudar a gerar um roadmap para aprender linguagens e desenvolver habilidades na área de front-end: .'},
+            {role: 'system', content: 'Você é um assistente que ajuda a criar roadmaps de aprendizado.'},
+            {role: 'user', content: queryDescription},
+            //{role: 'assistant', content: 'Claro, vou te ajudar a gerar um roadmap para aprender linguagens e desenvolver habilidades na área de front-end: .'},
         ];
-        const response = await openai.chat.completions.create({
-            model: 'gpt-3.5-turbo',
-            //prompt: `Generate a roadmap para aprender linguagens e desenvolver habilidades na área de ${query}.`, // Define o texto de entrada
-            messages: message
-        });
-        return response.data.choices[0].message.content;
-        //return response.data.choices[0].text;
+        try {
+            const response = await openai.chat.completions.create({
+                model: 'gpt-3.5-turbo',
+                //prompt: `Generate a roadmap para aprender linguagens e desenvolver habilidades na área de ${query}.`, // Define o texto de entrada
+                messages: message,
+            });
+            return response.data.choices[0].message.content;
+            //return response.data.choices[0].text;
+        } catch (error) {
+            console.error('Erro na API OpenAI:', error.response?.data || error.message);
+            throw new Error('Erro ao gerar o roadmap.');
+        }
     };
     
     const roadQuery = await chatGPT(queryDescription);

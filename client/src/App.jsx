@@ -10,19 +10,20 @@ function App() {
     e.preventDefault()
     const query = await generateQuery();
     setRoadQuery(query);
+    console.log('Resposta da API: ', roadQuery);
   }
 
   const generateQuery = async () => {
       const response = await fetch("http://localhost:3005/generate", {
         method: 'POST',
         headers: {
-          "Content-type": "application/json"
+          "Content-type": "application/json",
         },
         body: JSON.stringify({ queryDescription: userPrompt }),
       });
 
       const data = await response.json();
-      return data.roadQuery;
+      return data.response;
   };
   
   return (
@@ -30,7 +31,7 @@ function App() {
       <img src={Logo} alt="" className={styles.icon} />
       <h3 className={styles.title}>Generate RoadMap with AI</h3>
 
-      <form onSubmit={onSubmit} className={styles.form}>
+      <form onSubmit={onSubmit}>
         <input 
           type="text" 
           name="query-description"
